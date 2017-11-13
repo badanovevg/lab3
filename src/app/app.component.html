@@ -1,0 +1,137 @@
+<div class="panel">
+    <div class="form-block">
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="id" name="id" id="id" type="number" size="31" maxlength="30" placeholder="Id" #idV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="name" name="name" id="name" type="text" size="31" maxlength="30" placeholder="Имя" #nameV="ngModel" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="surname" name="surname" id="surname" type="text" size="31" maxlength="30" placeholder="Фамилия" #surnameV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="patronymic" name="patronymic" id="patronymic" type="text" size="31" maxlength="30" placeholder="Отчество" #patronymicV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="position" name="position" id="position" type="text" size="31" maxlength="40" placeholder="Должность" #positionV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                Дата рождения:
+                <input class="form-control" [(ngModel)]="calendar" name="calendar" type="date" id="calendar" #calendarV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="address" name="address" id="address" type="text" size="31" maxlength="60" placeholder="Адрес проживания" #addressV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="phone" name="phone" id="phone" type="number" size="31" maxlength="40" placeholder="Контактный телефон" #phoneV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="email" type="email" name="email" id="email" size="31" maxlength="40" placeholder="Электронный адрес" #emailV="ngModel" required emai>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <input class="form-control" [(ngModel)]="salary" name="salary" id="salary" type="number" size="31" maxlength="40" placeholder="Сумма оклада" #salaryV="ngModel" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-8">
+
+
+                <button [disabled]="idV.invalid || nameV.invalid || surnameV.invalid || patronymicV.invalid || positionV.invalid || calendarV.invalid || addressV.invalid || phoneV.invalid || emailV.invalid || salaryV.invalid" class="btn btn-default" (click)="addUser(id,name,surname,patronymic,position,calendar,address,phone,email,salary)">Добавить</button>
+            </div>
+        </div>
+    </div>
+    <table class="table ">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>ФИО</th>
+                <th>Должность</th>
+                <th>Дата рождения</th>
+                <th>Адрес проживания</th>
+                <th>Контактный телефон</th>
+                <th>Электронный адрес</th>
+                <th>Сумма оклада</th>
+                <th>Редактировать</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <ng-template [ngTemplateOutlet]="loadTemplate(user)" [ngTemplateOutletContext]="{ $implicit: user}">
+                </ng-template>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--шаблон для чтения-->
+<ng-template #readOnlyTemplate let-user>
+    <td>{{user.id}}</td>
+    <td>{{user.name + ' ' + user.surname + ' ' + user.patronymic}}</td>
+    <td>{{user.position}}</td>
+    <td>{{user.calendar}}</td>
+    <td>{{user.address}}</td>
+    <td>{{user.phone}}</td>
+    <td>{{user.email}}</td>
+    <td>{{user.salary}}</td>
+    <td>
+        <input type="button" value="Изменить" class="btn btn-default" (click)="editUser(user)" />
+    </td>
+    <td>
+        <input type="button" value="Удалить" (click)="deleteUser(user)" class="btn btn-danger" />
+    </td>
+</ng-template>
+
+<!--шаблон для редактирования-->
+<ng-template #editTemplate>
+    <td>
+        <input type="number" [(ngModel)]="editedUser.id" readonly disabled class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedUser.name" class="form-control" />
+        <input type="text" [(ngModel)]="editedUser.surname" class="form-control" />
+        <input type="text" [(ngModel)]="editedUser.patronymic" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedUser.position" class="form-control" />
+    </td>
+    <td>
+        <input type="date" [(ngModel)]="editedUser.calendar" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedUser.address" class="form-control" />
+    </td>
+    <td>
+        <input type="number" [(ngModel)]="editedUser.phone" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedUser.email" class="form-control" />
+    </td>
+    <td>
+        <input type="number" [(ngModel)]="editedUser.salary" class="form-control" />
+    </td>
+    <td>
+        <input type="button" value="Сохранить" (click)="saveUser()" class="btn btn-success" />
+    </td>
+    <td>
+        <input type="button" value="Отмена" (click)="cancel()" class="btn btn-warning" />
+    </td>
+</ng-template>
